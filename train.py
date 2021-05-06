@@ -42,7 +42,7 @@ def build_dataset(config):
 
     dsTrain = ImageFolder('data/WildFire/train/', train_transforms, target_transform=target_transform)
     dsVal = ImageFolder('data/WildFire/val/', val_transforms, target_transform=target_transform)
-    dsTest = ImageFolder('data/WildFire/val/', val_transforms, target_transform=target_transform)
+    dsTest = ImageFolder('data/WildFire/test/', val_transforms, target_transform=target_transform)
    
     train_loader = DataLoader(dsTrain, batch_size=config['batch_size'], shuffle=True)
     val_loader = DataLoader(dsVal, batch_size=config['batch_size'], shuffle=True)
