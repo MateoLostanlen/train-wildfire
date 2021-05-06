@@ -247,7 +247,9 @@ class Trainer:
                       f"{eval_metrics['val_loss']:.4}: saving state...")
                 self.min_loss = eval_metrics['val_loss']
                 wandb.log({"best_val_loss": self.min_loss})
-                wandb.log({"best_val_acc": eval_metrics['acc1']})
+                wandb.log({"best_val_acc": eval_metrics['val_acc']})
+                wandb.log({"best_test_loss": eval_metrics['test_loss']})
+                wandb.log({"best_test_acc": eval_metrics['test_acc']})
                 self.save(self.output_file)
 
     def lr_find(self, freeze_until=None, start_lr=1e-7, end_lr=1, num_it=100):
