@@ -242,14 +242,14 @@ class Trainer:
             mb.write(f"Epoch {self.start_epoch + self.epoch}/{self.start_epoch + num_epochs} - "
                      f"{self._eval_metrics_str(eval_metrics)}")
 
-            if eval_metrics['val_loss'] < self.min_loss:
+            if eval_metrics['loss_val'] < self.min_loss:
                 print(f"Validation loss decreased {self.min_loss:.4} --> "
-                      f"{eval_metrics['val_loss']:.4}: saving state...")
-                self.min_loss = eval_metrics['val_loss']
+                      f"{eval_metrics['loss_val']:.4}: saving state...")
+                self.min_loss = eval_metrics['loss_val']
                 wandb.log({"best_val_loss": self.min_loss})
-                wandb.log({"best_val_acc": eval_metrics['val_acc']})
-                wandb.log({"best_test_loss": eval_metrics['test_loss']})
-                wandb.log({"best_test_acc": eval_metrics['test_acc']})
+                wandb.log({"best_val_acc": eval_metrics['acc_acc']})
+                wandb.log({"best_test_loss": eval_metrics['loss_test']})
+                wandb.log({"best_test_acc": eval_metrics['acc_test']})
                 self.save(self.output_file)
 
     def lr_find(self, freeze_until=None, start_lr=1e-7, end_lr=1, num_it=100):
@@ -406,47 +406,48 @@ class ClassificationTrainer(Trainer):
         self.model.eval()
         sigmoid = nn.Sigmoid()
 
-        val_loss, top_val, num_samples = 0, 0, 0
+        loss_val, top_val, num_samples = 0, 0, 0
         for x, target in self.val_loader:
             x, target = self.to_cuda(x, target)
 
             # Forward
             out = self.model(x)
             # Loss computation
-            val_loss += self.criterion(out, target).item()
+            loss_val += self.criterion(out, target).item()
 
             top_val += torch.sum((target >= 0.5) == (out >= 0.5)).item()
 
             num_samples += x.shape[0]
 
-            self.val_loss_recorder.append(val_loss / num_samples)
+            self.val_loss_recorder.append(loss_val / num_samples)
 
-        val_loss /= len(self.val_loader)
+        loss_val /= len(self.val_loader)
         acc_val = top_val/ num_samples
         wandb.log({"val_acc": acc_val})
-        wandb.log({"val_loss": val_loss})
+        wandb.log({"val_loss": loss_val})
       
-        test_loss, top_test, num_samples = 0, 0, 0
+        loss_test, top_test, num_samples = 0, 0, 0
         for x, target in self.test_loader:
             x, target = self.to_cuda(x, target)
 
             # Forward
             out = self.model(x)
             # Loss computation
-            test_loss += self.criterion(out, target).item()
+            loss_test += self.criterion(out, target).item()
 
             top_test += torch.sum((target >= 0.5) == (out >= 0.5)).item()
 
             num_samples += x.shape[0]
 
-        test_loss /= len(self.test_loader)
+        loss_test /= len(self.test_loader)
         acc_test = top_test/ num_samples
         wandb.log({"test_acc": acc_test})
-        wandb.log({"test_loss": test_loss})
-        return dict(train_loss=self.train_loss, val_loss=val_loss, acc_val=acc_val, acc_test=acc_test)
+        wandb.log({"test_loss": loss_test})
+        return dict(train_loss=self.train_loss, loss_val=loss_val, loss_test=loss_test, acc_val=acc_val, acc_test=acc_test)
 
     @staticmethod
     def _eval_metrics_str(eval_metrics):
         return (f"Training loss: {eval_metrics['train_loss']:.4} "
-                f"Validation loss: {eval_metrics['val_loss']:.4} "
+                f"Validation loss: {eval_metrics['loss_val']:.4} "
+                f"Test loss: {eval_metrics['loss_test']:.4} "
                 f"(Acc Val: {eval_metrics['acc_val']:.2%}, Acc Test: {eval_metrics['acc_test']:.2%})")
