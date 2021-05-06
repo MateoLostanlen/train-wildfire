@@ -50,3 +50,5 @@ def get_config():
         'checkpoint': {
             'value': 'checkpoint.pth'}
     }) 
+
+    return sweep_config
