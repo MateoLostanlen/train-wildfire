@@ -247,7 +247,7 @@ class Trainer:
                       f"{eval_metrics['loss_val']:.4}: saving state...")
                 self.min_loss = eval_metrics['loss_val']
                 wandb.log({"best_val_loss": self.min_loss})
-                wandb.log({"best_val_acc": eval_metrics['acc_acc']})
+                wandb.log({"best_val_acc": eval_metrics['acc_val']})
                 wandb.log({"best_test_loss": eval_metrics['loss_test']})
                 wandb.log({"best_test_acc": eval_metrics['acc_test']})
                 self.save(self.output_file)
