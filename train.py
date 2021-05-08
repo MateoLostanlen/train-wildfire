@@ -8,6 +8,7 @@ from torch.optim.lr_scheduler import OneCycleLR
 from pyrovision.models.rexnet import rexnet1_0x
 import holocron
 from trainer import ClassificationTrainer
+from cnn_model import cnn_model
 
 
 def target_transform(target):
@@ -52,11 +53,29 @@ def build_dataset(config):
 
 
 def build_network(config):
+    model_cut = -2
+    num_classes=1
+    lin_features=512
+    dropout_prob=0.5
+    bn_final=False
+    concat_pool=True
 
+    model_arch = config['model']
+    base_model = holocron.models.__dict__[model_arch](True)
     
-    model = rexnet1_0x(pretrained=True)
+    if model_arch[:6]=='rexnet':
+        nb_features = base_model.head[1].in_features
 
-  
+    elif model_arch[:6]=='resnet':
+        nb_features = base_model.head[1].in_features
+
+    elif:
+        nb_features=1024 #darknet
+    
+    
+    model = cnn_model(base_model, model_cut, nb_features, num_classes,
+                      lin_features, dropout_prob, bn_final=bn_final, concat_pool=concat_pool)
+
 
     return model
 
