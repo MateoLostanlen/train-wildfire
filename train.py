@@ -42,7 +42,7 @@ def build_dataset(config):
     ])
 
     dsTrain = ImageFolder('data/train/', train_transforms, target_transform=target_transform)
-    dsVal = ImageFolder('data/val/', val_transforms, target_transform=target_transform)
+    dsVal = ImageFolder('data/test/', val_transforms, target_transform=target_transform)
     #dsTest = ImageFolder('data/WildFire/test/', val_transforms, target_transform=target_transform)
    
     train_loader = DataLoader(dsTrain, batch_size=config['batch_size'], shuffle=True)
@@ -87,7 +87,7 @@ def train(config=None):
         # this config will be set by Sweep Controller
         config = wandb.config
 
-        train_loader, val_loader, test_loader = build_dataset(config)
+        train_loader, val_loader = build_dataset(config)
         model = build_network(config)
         lr = config['lr']
         wd = config['wd']
