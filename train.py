@@ -67,7 +67,7 @@ def build_network(config):
         nb_features = base_model.head[1].in_features
 
     elif model_arch[:6]=='resnet':
-        nb_features = base_model.head[1].in_features
+        nb_features = base_model.head.in_features
 
     else:
         nb_features=1024 #darknet
