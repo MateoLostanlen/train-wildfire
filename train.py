@@ -41,15 +41,15 @@ def build_dataset(config):
         normalize
     ])
 
-    dsTrain = ImageFolder('data/WildFire/train/', train_transforms, target_transform=target_transform)
-    dsVal = ImageFolder('data/WildFire/val/', val_transforms, target_transform=target_transform)
-    dsTest = ImageFolder('data/WildFire/test/', val_transforms, target_transform=target_transform)
+    dsTrain = ImageFolder('data/train/', train_transforms, target_transform=target_transform)
+    dsVal = ImageFolder('data/val/', val_transforms, target_transform=target_transform)
+    #dsTest = ImageFolder('data/WildFire/test/', val_transforms, target_transform=target_transform)
    
     train_loader = DataLoader(dsTrain, batch_size=config['batch_size'], shuffle=True)
     val_loader = DataLoader(dsVal, batch_size=config['batch_size'], shuffle=True)
-    test_loader = DataLoader(dsTest, batch_size=config['batch_size'], shuffle=True)
+    #test_loader = DataLoader(dsTest, batch_size=config['batch_size'], shuffle=True)
 
-    return train_loader, val_loader, test_loader
+    return train_loader, val_loader
 
 
 def build_network(config):
@@ -60,7 +60,7 @@ def build_network(config):
     bn_final=False
     concat_pool=True
 
-    model_arch = config['model']
+    model_arch = config['model_arch']
     base_model = holocron.models.__dict__[model_arch](True)
     
     if model_arch[:6]=='rexnet':
@@ -101,6 +101,6 @@ def train(config=None):
 
 
         #Trainer
-        trainer = ClassificationTrainer(model, train_loader, val_loader, test_loader, criterion, optimizer, 0, output_file=config['checkpoint'], configwb=True)
+        trainer = ClassificationTrainer(model, train_loader, val_loader, criterion, optimizer, 0, output_file=config['checkpoint'], configwb=True)
 
         trainer.fit_n_epochs(config['epochs'], config['lr'], config['freeze'])

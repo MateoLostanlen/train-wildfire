@@ -38,14 +38,14 @@ from utils import freeze_model
 
 class Trainer:
 
-    def __init__(self, model, train_loader, val_loader, test_loader, criterion, optimizer,
+    def __init__(self, model, train_loader, val_loader, criterion, optimizer,
                  gpu=None, output_file='checkpoint.pth', acc_threshold=0.05, configwb=None):
 
         self.model = model
         self.configwb = configwb
         self.train_loader = train_loader
         self.val_loader = val_loader
-        self.test_loader = test_loader
+
         self.criterion = criterion
         self.optimizer = optimizer
         self.acc_threshold = acc_threshold
@@ -248,8 +248,7 @@ class Trainer:
                 self.min_loss = eval_metrics['loss_val']
                 wandb.log({"best_val_loss": self.min_loss})
                 wandb.log({"best_val_acc": eval_metrics['acc_val']})
-                wandb.log({"best_test_loss": eval_metrics['loss_test']})
-                wandb.log({"best_test_acc": eval_metrics['acc_test']})
+       
                 self.save(self.output_file)
 
     def lr_find(self, freeze_until=None, start_lr=1e-7, end_lr=1, num_it=100):
@@ -426,28 +425,11 @@ class ClassificationTrainer(Trainer):
         wandb.log({"val_acc": acc_val})
         wandb.log({"val_loss": loss_val})
       
-        loss_test, top_test, num_samples = 0, 0, 0
-        for x, target in self.test_loader:
-            x, target = self.to_cuda(x, target)
 
-            # Forward
-            out = self.model(x)
-            # Loss computation
-            loss_test += self.criterion(out, target).item()
-
-            top_test += torch.sum((target >= 0.5) == (out >= 0.5)).item()
-
-            num_samples += x.shape[0]
-
-        loss_test /= len(self.test_loader)
-        acc_test = top_test/ num_samples
-        wandb.log({"test_acc": acc_test})
-        wandb.log({"test_loss": loss_test})
-        return dict(train_loss=self.train_loss, loss_val=loss_val, loss_test=loss_test, acc_val=acc_val, acc_test=acc_test)
+        return dict(train_loss=self.train_loss, loss_val=loss_val, acc_val=acc_val)
 
     @staticmethod
     def _eval_metrics_str(eval_metrics):
         return (f"Training loss: {eval_metrics['train_loss']:.4} "
                 f"Validation loss: {eval_metrics['loss_val']:.4} "
-                f"Test loss: {eval_metrics['loss_test']:.4} "
-                f"(Acc Val: {eval_metrics['acc_val']:.2%}, Acc Test: {eval_metrics['acc_test']:.2%})")
+                f"Acc Val: {eval_metrics['acc_val']:.2%}")
