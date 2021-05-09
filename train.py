@@ -76,19 +76,19 @@ def build_network(config):
 
     #load checkpoint
     if model_arch =='darknet19':
-    cp_id = '1vcsVcxPXlsbqdUFqw4NDVTxWi4KfT6Mm'
+        cp_id = '1vcsVcxPXlsbqdUFqw4NDVTxWi4KfT6Mm'
 
     elif model_arch =='darknet24':
-    cp_id = '1No4ZdqLB66Z0MF_kIH8Lm_AM5ukKnMyV'
+        cp_id = '1No4ZdqLB66Z0MF_kIH8Lm_AM5ukKnMyV'
 
     elif model_arch =='resnet50':
-    cp_id = '19B-VgZ7tNaADIXgSf42dAl0C8ldumPkX'
+        cp_id = '19B-VgZ7tNaADIXgSf42dAl0C8ldumPkX'
 
     elif model_arch =='rexnet1_0x':
-    cp_id = '1_cgPPPQ8rMuyQkCzIUtjkGQ0CyQIY21G'
+        cp_id = '1_cgPPPQ8rMuyQkCzIUtjkGQ0CyQIY21G'
 
     elif model_arch =='rexnet1_3x':
-    cp_id = '1DhHuqBYEgR8ePKjePkpLkK2aNG5ITWGm'
+        cp_id = '1DhHuqBYEgR8ePKjePkpLkK2aNG5ITWGm'
 
 
     model = cnn_model(base_model, model_cut, nb_features, num_classes,
