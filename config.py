@@ -39,7 +39,7 @@ def get_config():
             'value': 32}
         ,
         'freeze': {
-            'value': '1'}
+            'value': None}
         ,
         'checkpoint': {
             'value': 'checkpoint.pth'}
