@@ -12,16 +12,16 @@ def get_config():
     sweep_config['metric'] = metric
     parameters_dict = {
         'epochs': {
-            'values': [5, 10, 15]
+            'values': [10, 20, 30, 40]
             },
         'lr': {
-            'values': [0.0004, 0.0006, 0.0008, 0.001, 0.003]
+            'values': [ 0.000003, 0.000007, 0.00001, 0.00003, 0.00007, 0.0001, 0.0003, 0.0007, 0.001]
             },
         'wd': {
             'values': [ 0, 0.000001, 0.00001, 0.0001, 0.001]
             },
         'model_arch': {
-            'values': [ 'rexnet1_3x']
+            'values': ['resnet50', 'darknet19', 'darknet24',  'rexnet1_0x', 'rexnet1_3x']
             },
         'image_size': {
             'value': 448

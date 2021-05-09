@@ -9,6 +9,7 @@ from pyrovision.models.rexnet import rexnet1_0x
 import holocron
 from trainer import ClassificationTrainer
 from cnn_model import cnn_model
+from google_drive_downloader import GoogleDriveDownloader as gdd
 
 
 def target_transform(target):
@@ -61,8 +62,9 @@ def build_network(config):
     concat_pool=True
 
     model_arch = config['model_arch']
-    base_model = holocron.models.__dict__[model_arch](True)
-    
+    print(model_arch)
+    base_model = holocron.models.__dict__[model_arch](False)
+
     if model_arch[:6]=='rexnet':
         nb_features = base_model.head[1].in_features
 
@@ -71,10 +73,30 @@ def build_network(config):
 
     else:
         nb_features=1024 #darknet
-    
-    
+
+    #load checkpoint
+    if model_arch =='darknet19':
+    cp_id = '1vcsVcxPXlsbqdUFqw4NDVTxWi4KfT6Mm'
+
+    elif model_arch =='darknet24':
+    cp_id = '1No4ZdqLB66Z0MF_kIH8Lm_AM5ukKnMyV'
+
+    elif model_arch =='resnet50':
+    cp_id = '19B-VgZ7tNaADIXgSf42dAl0C8ldumPkX'
+
+    elif model_arch =='rexnet1_0x':
+    cp_id = '1_cgPPPQ8rMuyQkCzIUtjkGQ0CyQIY21G'
+
+    elif model_arch =='rexnet1_3x':
+    cp_id = '1DhHuqBYEgR8ePKjePkpLkK2aNG5ITWGm'
+
+
     model = cnn_model(base_model, model_cut, nb_features, num_classes,
-                      lin_features, dropout_prob, bn_final=bn_final, concat_pool=concat_pool)
+                    lin_features, dropout_prob, bn_final=bn_final, concat_pool=concat_pool)
+
+    gdd.download_file_from_google_drive(file_id=cp_id, dest_path='./checkpoint.pth')
+
+    model.load_state_dict(torch.load('checkpoint.pth'))
 
 
     return model
