@@ -414,7 +414,7 @@ class ClassificationTrainer(Trainer):
             # Loss computation
             loss_val += self.criterion(out, target).item()
 
-            top_val += torch.sum((target >= 0.5) == (out >= 0.5)).item()
+            top_val += torch.sum((target >= 0.5) == (torch.sigmoid(out) >= 0.5)).item()
 
             num_samples += x.shape[0]
 
