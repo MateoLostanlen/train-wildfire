@@ -42,8 +42,8 @@ def build_dataset(config):
         normalize
     ])
 
-    dsTrain = ImageFolder('data/train/', train_transforms, target_transform=target_transform)
-    dsVal = ImageFolder('data/test/', val_transforms, target_transform=target_transform)
+    dsTrain = ImageFolder('data/WildFirev3/train/', train_transforms, target_transform=target_transform)
+    dsVal = ImageFolder('data/WildFirev3/test/', val_transforms, target_transform=target_transform)
     #dsTest = ImageFolder('data/WildFire/test/', val_transforms, target_transform=target_transform)
    
     train_loader = DataLoader(dsTrain, batch_size=config['batch_size'], shuffle=True)
