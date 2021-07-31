@@ -5,11 +5,11 @@ from torchvision.datasets import ImageFolder
 from torchvision.transforms import transforms
 from torch.utils.data import RandomSampler, SequentialSampler, DataLoader
 from torch.optim.lr_scheduler import OneCycleLR
-from pyrovision.models.rexnet import rexnet1_0x
+
 import holocron
 from trainer import ClassificationTrainer
 from cnn_model import cnn_model
-from google_drive_downloader import GoogleDriveDownloader as gdd
+
 
 
 def target_transform(target):
@@ -75,28 +75,20 @@ def build_network(config):
         nb_features=1024 #darknet
 
     #load checkpoint
-    if model_arch =='darknet19':
-        cp_id = '1vcsVcxPXlsbqdUFqw4NDVTxWi4KfT6Mm'
 
-    elif model_arch =='darknet24':
-        cp_id = '1No4ZdqLB66Z0MF_kIH8Lm_AM5ukKnMyV'
-
-    elif model_arch =='resnet50':
-        cp_id = '19B-VgZ7tNaADIXgSf42dAl0C8ldumPkX'
-
-    elif model_arch =='rexnet1_0x':
-        cp_id = '1_cgPPPQ8rMuyQkCzIUtjkGQ0CyQIY21G'
+    if model_arch =='rexnet1_0x':
+        cp= 'checkpoints/rexnet1_0x.pth'
 
     elif model_arch =='rexnet1_3x':
-        cp_id = '1DhHuqBYEgR8ePKjePkpLkK2aNG5ITWGm'
+        cp = 'checkpoints/rexnet1_3x.pth'
 
 
     model = cnn_model(base_model, model_cut, nb_features, num_classes,
                     lin_features, dropout_prob, bn_final=bn_final, concat_pool=concat_pool)
 
-    gdd.download_file_from_google_drive(file_id=cp_id, dest_path='./checkpoint.pth')
+ 
 
-    model.load_state_dict(torch.load('checkpoint.pth'))
+    model.load_state_dict(torch.load(cp,map_location=torch.device('cpu')))
 
 
     return model
