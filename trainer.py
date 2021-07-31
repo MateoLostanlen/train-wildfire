@@ -23,7 +23,7 @@ from torch.autograd import Variable
 from torch.utils.data.sampler import Sampler
 from torch.utils.data.dataset import Dataset
 import PIL
-from pyrovision.models.rexnet import rexnet1_0x
+
 import holocron
 from collections import defaultdict
 import matplotlib.pyplot as plt

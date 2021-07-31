@@ -82,7 +82,7 @@ def build_network(config):
     elif model_arch =='rexnet1_3x':
         cp = 'checkpoints/rexnet1_3x.pth'
 
-    elif model_arch = "darknet19":
+    elif model_arch == "darknet19":
         cp = 'checkpoints/darknet19.pth'
 
 
