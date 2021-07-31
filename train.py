@@ -82,6 +82,9 @@ def build_network(config):
     elif model_arch =='rexnet1_3x':
         cp = 'checkpoints/rexnet1_3x.pth'
 
+    elif model_arch = "darknet19":
+        cp = 'checkpoints/darknet19.pth'
+
 
     model = cnn_model(base_model, model_cut, nb_features, num_classes,
                     lin_features, dropout_prob, bn_final=bn_final, concat_pool=concat_pool)
