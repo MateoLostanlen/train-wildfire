@@ -217,7 +217,7 @@ class Trainer:
         """
 
         if self.configwb:
-          wandb.watch(self.criterion, log="all", log_freq=10)
+          wandb.watch(self.criterion, log="all", log_freq=200)
 
         self.epoch = 0
         self.train_loss_recorder = []
