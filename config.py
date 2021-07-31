@@ -21,7 +21,7 @@ def get_config():
             'values': [ 0, 0.000001, 0.00001, 0.0001, 0.001]
             },
         'model_arch': {
-            'values': [ 'rexnet1_0x']
+            'values': [ 'rexnet1_0x', 'rexnet1_3x']
             },
         'image_size': {
             'value': 448
