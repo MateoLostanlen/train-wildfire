@@ -12,10 +12,10 @@ def get_config():
     sweep_config['metric'] = metric
     parameters_dict = {
         'epochs': {
-            'values': [10, 20, 30]
+            'values': [10]
             },
         'lr': {
-            'values': [0.00003, 0.00007, 0.0001, 0.0003, 0.0007, 0.001]
+            'values': [0.0001, 0.0003, 0.0007, 0.001]
             },
         'wd': {
             'values': [ 0, 0.000001, 0.00001, 0.0001, 0.001]
